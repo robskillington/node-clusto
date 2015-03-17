@@ -1,0 +1,40 @@
+{
+  "name": "clusto",
+  "version": "0.1.0",
+  "description": "A clusto client library for Node.js. http://clusto.org",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run jshint && npm run cover",
+    "jshint": "jshint --verbose .",
+    "cover": "istanbul cover --report cobertura --print detail node_modules/.bin/tape -- test/index.js && istanbul check-coverage --branches=0",
+    "view-cover": "istanbul report html && opn ./coverage/index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/robskillington/clusto.git"
+  },
+  "keywords": [
+    "clusto"
+  ],
+  "author": "Rob Skillington",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/robskillington/clusto/issues"
+  },
+  "homepage": "https://github.com/robskillington/clusto",
+  "devDependencies": {
+    "istanbul": "^0.3.7",
+    "jshint": "^2.6.3",
+    "pre-commit": "^1.0.6",
+    "tape": "^2.0.0"
+  },
+  "dependencies": {
+    "airlock": "^2.1.0",
+    "lodash": "^3.5.0",
+    "request": "^2.53.0"
+  },
+  "pre-commit": [
+    "jshint",
+    "test"
+  ]
+}
