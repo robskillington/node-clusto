@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "http://github.com/robskillington/clusto.git"
+    "url": "http://github.com/robskillington/node-clusto.git"
   },
   "keywords": [
     "clusto"
@@ -19,9 +19,9 @@
   "author": "Rob Skillington",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/robskillington/clusto/issues"
+    "url": "https://github.com/robskillington/node-clusto/issues"
   },
-  "homepage": "https://github.com/robskillington/clusto",
+  "homepage": "https://github.com/robskillington/node-clusto",
   "devDependencies": {
     "istanbul": "^0.3.7",
     "jshint": "^2.6.3",
