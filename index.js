@@ -66,6 +66,6 @@ ClustoClient.prototype._tryRequest = function tryRequest(callback, uri, method, 
             headers: headers,
             json: json
         };
-        request(options, requestCallback);
+        self._request(options, requestCallback);
     }
 };
