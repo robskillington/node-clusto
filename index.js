@@ -63,6 +63,7 @@ ClustoClient.prototype._tryRequest = function tryRequest(callback, uri, method, 
         var options = {
             uri: uri,
             method: method,
+            headers: headers,
             json: json
         };
         request(options, requestCallback);
