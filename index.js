@@ -26,6 +26,7 @@ function ClustoClient(options) {
         logger: this._logger,
         statsd: this._statsd
     }, options.airlock || {}));
+    this._timeout = options.timeout || 15000;
 }
 
 ClustoClient.prototype.getByName = function getByName(name, callback) {
@@ -64,7 +65,8 @@ ClustoClient.prototype._tryRequest = function tryRequest(callback, uri, method, 
             uri: uri,
             method: method,
             headers: headers,
-            json: json
+            json: json,
+            timeout: self._timeout
         };
         self._request(options, requestCallback);
     }
