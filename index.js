@@ -4,6 +4,8 @@ var _ = require('lodash');
 var Prober = require('airlock');
 var request = require('request');
 
+var CLUSTO_TYPE_POOL = '/pool/';
+
 module.exports.ClustoClient = ClustoClient;
 
 function ClustoClient(options) {
@@ -27,6 +29,15 @@ function ClustoClient(options) {
         statsd: this._statsd
     }, options.airlock || {}));
     this._timeout = options.timeout || 15000;
+}
+
+ClustoClient.prototype.pool = function getPool(name, callback) {
+    var uri = CLUSTO_TYPE_POOL + encodeURIComponent(name);
+    this._tryRequest(callback, uri);
+}
+
+ClustoClient.prototype.pools = function getPools(callback) {
+    this._tryRequest(callback, CLUSTO_TYPE_POOL);
 }
 
 ClustoClient.prototype.getByName = function getByName(name, callback) {
