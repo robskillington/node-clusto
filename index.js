@@ -4,10 +4,33 @@ var _ = require('lodash');
 var Prober = require('airlock');
 var request = require('request');
 
-var CLUSTO_TYPE_POOL = '/pool/';
-var CLUSTO_TYPE_SERVER = '/server/';
+var CLUSTO_TYPES = [
+    'appliance',
+    'cage',
+    'clustometa',
+    'consoleserver',
+    'datacenter',
+    'generic',
+    'location',
+    'networkswitch',
+    'pipeline',
+    'pod',
+    'pool',
+    'powerstrip',
+    'rack',
+    'resourcemanager',
+    'role',
+    'server',
+    'zone'
+];
+var CLUSTO_TYPE_PLURALS = {
+    'networkswitch': 'networkswitches'
+};
 
-module.exports.ClustoClient = ClustoClient;
+module.exports = {
+    CLUSTO_TYPES: CLUSTO_TYPES,
+    ClustoClient: ClustoClient
+};
 
 function ClustoClient(options) {
     options = options || {};
@@ -30,24 +53,6 @@ function ClustoClient(options) {
         statsd: this._statsd
     }, options.airlock || {}));
     this._timeout = options.timeout || 15000;
-}
-
-ClustoClient.prototype.pool = function getPool(name, callback) {
-    var uri = CLUSTO_TYPE_POOL + encodeURIComponent(name);
-    this._tryRequest(callback, uri);
-}
-
-ClustoClient.prototype.pools = function getPools(callback) {
-    this._tryRequest(callback, CLUSTO_TYPE_POOL);
-}
-
-ClustoClient.prototype.server = function getServer(name, callback) {
-    var uri = CLUSTO_TYPE_SERVER + encodeURIComponent(name);
-    this._tryRequest(callback, uri);
-}
-
-ClustoClient.prototype.servers = function getServers(callback) {
-    this._tryRequest(callback, CLUSTO_TYPE_SERVER);
 }
 
 ClustoClient.prototype.getByName = function getByName(name, callback) {
@@ -92,3 +97,28 @@ ClustoClient.prototype._tryRequest = function tryRequest(callback, uri, method, 
         self._request(options, requestCallback);
     }
 };
+
+ClustoClient.defineClustoType = function definClustoType(typeName, typeNamePlural) {
+    var typeNamespace = '/' + typeName + '/';
+
+    if (!typeNamePlural) {
+        typeNamePlural = typeName + 's';
+    }
+
+    this.prototype[typeName] = function getEntity(name, callback) {
+        var uri = typeNamespace + encodeURIComponent(name) + '/';
+        this._tryRequest(callback, uri);
+    };
+
+    this.prototype[typeNamePlural] = function getEntities(callback) {
+        this._tryRequest(callback, typeNamespace);
+    };
+
+    return this;
+}.bind(ClustoClient);
+
+CLUSTO_TYPES.forEach(function eachClustoType(typeName) {
+    var typeNamePlural = _.get(CLUSTO_TYPE_PLURALS, typeName, typeName + 's');
+
+    ClustoClient.defineClustoType(typeName, typeNamePlural);
+});
