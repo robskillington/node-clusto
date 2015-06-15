@@ -3,16 +3,21 @@
 var _ = require('lodash');
 var test = require('tape');
 
-var ModNodeClusto = require('../index');
+var clusto = require('../index');
+var pluralize = require('../utils').pluralize;
 
-var CLUSTO_TYPES = ModNodeClusto.CLUSTO_TYPES;
-var CLUSTO_TYPE_PLURALS = ModNodeClusto.CLUSTO_TYPE_PLURALS;
-var ClustoClient = ModNodeClusto.ClustoClient;
-var pluralize = ModNodeClusto.pluralize;
+var CLUSTO_TYPES = clusto.CLUSTO_TYPES;
+var CLUSTO_TYPE_PLURALS = clusto.CLUSTO_TYPE_PLURALS;
+var ClustoClient = clusto.ClustoClient;
 
 
 test('ClustoClient is a function', function t(assert) {
     assert.equal(typeof ClustoClient, 'function');
+    assert.end();
+});
+
+test('ClustoClient includes an instance method of `getByName`', function t(assert) {
+    assert.equal(typeof ClustoClient.prototype.getByName, 'function');
     assert.end();
 });
 

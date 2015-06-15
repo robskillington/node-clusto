@@ -4,6 +4,8 @@ var _ = require('lodash');
 var Prober = require('airlock');
 var request = require('request');
 
+var pluralize = require('./utils').pluralize;
+
 var CLUSTO_TYPES = [
     'appliance',
     'cage',
@@ -28,15 +30,10 @@ var CLUSTO_TYPE_PLURALS = {
 };
 
 module.exports = {
-    CLUSTO_TYPES: CLUSTO_TYPES,
-    CLUSTO_TYPE_PLURALS: CLUSTO_TYPE_PLURALS,
-    ClustoClient: ClustoClient,
-    pluralize: pluralize
+    CLUSTO_TYPES: Object.freeze(CLUSTO_TYPES),
+    CLUSTO_TYPE_PLURALS: Object.freeze(CLUSTO_TYPE_PLURALS),
+    ClustoClient: ClustoClient
 };
-
-function pluralize(word, dictionary) {
-    return _.get(dictionary, word, word + 's');
-}
 
 function ClustoClient(options) {
     options = options || {};
