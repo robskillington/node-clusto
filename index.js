@@ -29,6 +29,7 @@ var CLUSTO_TYPE_PLURALS = {
 
 module.exports = {
     CLUSTO_TYPES: CLUSTO_TYPES,
+    CLUSTO_TYPE_PLURALS: CLUSTO_TYPE_PLURALS,
     ClustoClient: ClustoClient
 };
 
