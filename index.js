@@ -4,7 +4,36 @@ var _ = require('lodash');
 var Prober = require('airlock');
 var request = require('request');
 
-module.exports.ClustoClient = ClustoClient;
+var pluralize = require('./utils').pluralize;
+
+var CLUSTO_TYPES = [
+    'appliance',
+    'cage',
+    'clustometa',
+    'consoleserver',
+    'datacenter',
+    'generic',
+    'location',
+    'networkswitch',
+    'pipeline',
+    'pod',
+    'pool',
+    'powerstrip',
+    'rack',
+    'resourcemanager',
+    'role',
+    'server',
+    'zone'
+];
+var CLUSTO_TYPE_PLURALS = {
+    'networkswitch': 'networkswitches'
+};
+
+module.exports = {
+    CLUSTO_TYPES: Object.freeze(CLUSTO_TYPES),
+    CLUSTO_TYPE_PLURALS: Object.freeze(CLUSTO_TYPE_PLURALS),
+    ClustoClient: ClustoClient
+};
 
 function ClustoClient(options) {
     options = options || {};
@@ -71,3 +100,28 @@ ClustoClient.prototype._tryRequest = function tryRequest(callback, uri, method, 
         self._request(options, requestCallback);
     }
 };
+
+ClustoClient.defineClustoType = function defineClustoType(typeName, typeNamePlural) {
+    var typeNamespace = '/' + typeName + '/';
+
+    if (!typeNamePlural) {
+        typeNamePlural = pluralize(typeName, CLUSTO_TYPE_PLURALS);
+    }
+
+    this.prototype[typeName] = function getEntity(name, callback) {
+        var uri = typeNamespace + encodeURIComponent(name) + '/';
+        this._tryRequest(callback, uri);
+    };
+
+    this.prototype[typeNamePlural] = function getEntities(callback) {
+        this._tryRequest(callback, typeNamespace);
+    };
+
+    return this;
+}.bind(ClustoClient);
+
+CLUSTO_TYPES.forEach(function eachClustoType(typeName) {
+    var typeNamePlural = pluralize(typeName, CLUSTO_TYPE_PLURALS);
+
+    ClustoClient.defineClustoType(typeName, typeNamePlural);
+});
