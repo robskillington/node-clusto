@@ -8,6 +8,7 @@ var ModNodeClusto = require('../index');
 var CLUSTO_TYPES = ModNodeClusto.CLUSTO_TYPES;
 var CLUSTO_TYPE_PLURALS = ModNodeClusto.CLUSTO_TYPE_PLURALS;
 var ClustoClient = ModNodeClusto.ClustoClient;
+var pluralize = ModNodeClusto.pluralize;
 
 
 test('ClustoClient is a function', function t(assert) {
@@ -16,17 +17,15 @@ test('ClustoClient is a function', function t(assert) {
 });
 
 test('ClustoClient includes a list of instance methods named from Clusto types', function t(assert) {
-	CLUSTO_TYPES.forEach(function eachClustoType(typeName) {
-		assert.equal(typeof ClustoClient.prototype[typeName], 'function');
-	});
-	assert.end();
+    CLUSTO_TYPES.forEach(function eachClustoType(typeName) {
+        assert.equal(typeof ClustoClient.prototype[typeName], 'function');
+    });
+    assert.end();
 });
 
 test('ClustoClient includes the plural names of the Clusto types as instance methods', function t(assert) {
-	CLUSTO_TYPES.map(function mapClustoTypeNamePlural(typeName) {
-		return _.get(CLUSTO_TYPE_PLURALS, typeName, typeName + 's');
-	}).forEach(function eachClustoTypeNamePlural(typeNamePlural) {
-		assert.equal(typeof ClustoClient.prototype[typeNamePlural], 'function');
-	});
-	assert.end();
+    CLUSTO_TYPES.map(_.partial(pluralize, _, CLUSTO_TYPE_PLURALS)).forEach(function eachClustoTypeNamePlural(typeNamePlural) {
+        assert.equal(typeof ClustoClient.prototype[typeNamePlural], 'function');
+    });
+    assert.end();
 });

@@ -30,8 +30,13 @@ var CLUSTO_TYPE_PLURALS = {
 module.exports = {
     CLUSTO_TYPES: CLUSTO_TYPES,
     CLUSTO_TYPE_PLURALS: CLUSTO_TYPE_PLURALS,
-    ClustoClient: ClustoClient
+    ClustoClient: ClustoClient,
+    pluralize: pluralize
 };
+
+function pluralize(word, dictionary) {
+    return _.get(dictionary, word, word + 's');
+}
 
 function ClustoClient(options) {
     options = options || {};
@@ -99,11 +104,11 @@ ClustoClient.prototype._tryRequest = function tryRequest(callback, uri, method, 
     }
 };
 
-ClustoClient.defineClustoType = function definClustoType(typeName, typeNamePlural) {
+ClustoClient.defineClustoType = function defineClustoType(typeName, typeNamePlural) {
     var typeNamespace = '/' + typeName + '/';
 
     if (!typeNamePlural) {
-        typeNamePlural = typeName + 's';
+        typeNamePlural = pluralize(typeName, CLUSTO_TYPE_PLURALS);
     }
 
     this.prototype[typeName] = function getEntity(name, callback) {
@@ -119,7 +124,7 @@ ClustoClient.defineClustoType = function definClustoType(typeName, typeNamePlura
 }.bind(ClustoClient);
 
 CLUSTO_TYPES.forEach(function eachClustoType(typeName) {
-    var typeNamePlural = _.get(CLUSTO_TYPE_PLURALS, typeName, typeName + 's');
+    var typeNamePlural = pluralize(typeName, CLUSTO_TYPE_PLURALS);
 
     ClustoClient.defineClustoType(typeName, typeNamePlural);
 });
