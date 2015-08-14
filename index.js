@@ -72,7 +72,7 @@ ClustoClient.prototype._tryRequest = function tryRequest(callback, uri, method, 
 
     var headers = {};
     if (this._auth) {
-        headers.Authorization = 'Basic: ' + this._auth;
+        headers.Authorization = 'Basic ' + this._auth;
     }
 
     self._prober.probe(boundRequest, function onBypass(err) {
