@@ -1,6 +1,6 @@
 {
   "name": "clusto",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A clusto client library for Node.js. http://clusto.org",
   "main": "index.js",
   "scripts": {
