@@ -64,6 +64,19 @@ ClustoClient.prototype.getByName = function getByName(name, callback) {
     self._tryRequest(callback, uri);
 };
 
+ClustoClient.prototype.getEntitiesByAttrs = function getByName(attrs, callback) {
+    var self = this;
+    var attrsString;
+    try {
+        attrsString = JSON.stringify(attrs);
+    } catch (err) {
+        return callback(err);
+    }
+
+    var uri = '/query/get_entities?attrs=' + encodeURIComponent(attrsString);
+    self._tryRequest(callback, uri);
+};
+
 ClustoClient.prototype._tryRequest = function tryRequest(callback, uri, method, json) {
     var self = this;
     uri = self._baseURL + uri;
